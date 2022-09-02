@@ -5,6 +5,7 @@ import { TextField, Paper, Button, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { validator } from "./components/Validator";
 import useForm from "./components/useForm";
+import { type } from "@testing-library/user-event/dist/type";
 
 const useStyles = makeStyles(theme => ({
   margin: {
@@ -24,21 +25,41 @@ export default function App() {
     phone: ""
   };
 
-  const submit = () => {
-    console.log(" Submited");
-    console.log(state)
+  const handleSubmit = (e) => {
+    e.preventDefault()
+      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCy5_18qpxsWfq9WQ4cYBiJxp5r5WPVCdU'
+      , {
+        method: 'POST',
+        body: JSON.stringify({
+          email: state.email,
+          password: state.password,
+          phon: state.phone,
+          returnSecureToken: true
+        }),
+        headers: {
+          'Content-type' : 'application/json'
+        }
+      }
+      ).then(res => {
+        if(res.ok){
+          console.log('done')
+        }else{
+          return res.json().then(data =>{
+          alert(data)
+          })
+        }
+      })
+    
   };
 
   const {
     handleChange,
-    handleSubmit,
     handleBlur,
     state,
     errors,
     countryCode
   } = useForm({
     initState,
-    callback: submit,
     validator
   });
 
