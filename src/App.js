@@ -45,7 +45,11 @@ export default function App() {
           console.log('done')
         }else{
           return res.json().then(data =>{
-          alert(data)
+          let errorMassage = 'Athontacation faild'
+          if(data && data.error && data.error.message){
+            errorMassage = data.error.message
+          }
+          alert(errorMassage)
           })
         }
       })
